@@ -1,19 +1,17 @@
-Structural Visualisation for Java Based Software: a toolset for software structure visualisation
+Structome Visualiser: a toolset for software structome analysis and visualisation
 ==
 
 
-This is a set of small tools to analyse and visualise the structure of software. It currently supports Java, Groovy and Grails.
+This is a set of small tools to analyse and visualise the structome of Java based software.
 
 
 Status
 ==
 
-Pre-alpha version. Still usable. 
-Remarks:
-	- Does not support class name aliasing
+Development version.
 	
 	
 License
 ==
 
-Groovy is licensed under the terms of the http://www.apache.org/licenses/LICENSE-2.0.html[Apache License, Version 2.0]
+Groovy is licensed under the terms of the http://www.apache.org/licenses/LICENSE-2.0.html [Apache License, Version 2.0]
