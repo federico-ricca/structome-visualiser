@@ -17,16 +17,18 @@ package org.structome.core;
 
 import java.util.Collection;
 
-public interface Graph {
+public interface Graph<N extends Artefact, E extends Relation> {
 
-	public Collection<Artefact> artefacts();
+	public Collection<N> artefacts();
 
-	public void createRelation(final Artefact _artefactA, final Artefact _artefactB);
+	public void createRelation(final N _artefactA, final N _artefactB);
 
-	public void addArtefact(final Artefact _artefact);
+	public void addArtefact(final N _artefact);
 
-	public Collection<Artefact> getRelationsFor(String _id);
+	public Collection<N> getRelationsFor(String _id);
 
 	public boolean hasRelations(String _id);
+
+	public N getArtefact(String _id);
 
 }

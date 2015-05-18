@@ -15,8 +15,8 @@
  ***************************************************************************/
 package org.structome.core;
 
-public interface ArtefactRepresentationFactory<T extends Artefact> {
+public interface ArtefactStringRepresentationFactory<T extends Artefact> {
 
-	public String createRepresentationFor(T _anArtefact);
+	public String createStringRepresentationFor(T _anArtefact);
 
 }

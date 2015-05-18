@@ -22,10 +22,11 @@ import org.structome.core.Artefact;
 import org.structome.core.ArtefactFactory;
 import org.structome.core.Graph;
 import org.structome.core.GraphLoader;
+import org.structome.core.Relation;
 import org.structome.util.TextFileReader;
 import org.structome.util.TextFileReader.LineVisitor;
 
-public class CSVFileGraphLoader implements GraphLoader<String> {
+public class CSVFileGraphLoader<N extends Artefact, E extends Relation> implements GraphLoader<N, E, String> {
 	private File csvFile;
 
 	public CSVFileGraphLoader(String _filename) {
@@ -37,7 +38,8 @@ public class CSVFileGraphLoader implements GraphLoader<String> {
 	}
 
 	@Override
-	public void loadInto(final Graph _graph, final ArtefactFactory<String> _factory) throws IOException {
+	public void loadInto(final Graph<N, E> _graph, final ArtefactFactory<N, String> _factory)
+			throws IOException {
 		TextFileReader _reader = new TextFileReader(csvFile);
 
 		_reader.readWith(new LineVisitor() {
@@ -50,8 +52,8 @@ public class CSVFileGraphLoader implements GraphLoader<String> {
 					String _sourceElement = _line.substring(0, _iIndexOf).trim();
 					String _destElement = _line.substring(_iIndexOf + 1, _line.length()).trim();
 
-					Artefact _source = _factory.createArtefact(_sourceElement);
-					Artefact _dest = _factory.createArtefact(_destElement);
+					N _source = _factory.createArtefact(_sourceElement);
+					N _dest = _factory.createArtefact(_destElement);
 
 					_graph.addArtefact(_source);
 					_graph.addArtefact(_dest);
@@ -59,7 +61,7 @@ public class CSVFileGraphLoader implements GraphLoader<String> {
 				} else {
 					String _element = _line.trim();
 
-					Artefact _artefact = _factory.createArtefact(_element);
+					N _artefact = _factory.createArtefact(_element);
 
 					_graph.addArtefact(_artefact);
 				}

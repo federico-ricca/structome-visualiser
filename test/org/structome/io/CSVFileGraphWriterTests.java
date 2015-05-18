@@ -28,9 +28,10 @@ import java.util.Set;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.structome.core.ArtefactRepresentationFactory;
+import org.structome.core.ArtefactStringRepresentationFactory;
 import org.structome.impl.SimpleArtefact;
 import org.structome.impl.SimpleGraph;
+import org.structome.impl.SimpleRelation;
 
 public class CSVFileGraphWriterTests {
 	@Rule
@@ -38,7 +39,7 @@ public class CSVFileGraphWriterTests {
 
 	@Test
 	public void testWriteSimpleGraph() throws IOException {
-		SimpleGraph _graph = new SimpleGraph();
+		SimpleGraph<SimpleArtefact, SimpleRelation> _graph = new SimpleGraph<SimpleArtefact, SimpleRelation>();
 
 		SimpleArtefact _a = new SimpleArtefact("A");
 		SimpleArtefact _b = new SimpleArtefact("B");
@@ -54,15 +55,15 @@ public class CSVFileGraphWriterTests {
 		_graph.createRelation(_a, _c);
 		_graph.createRelation(_c, _d);
 
-		ArtefactRepresentationFactory<SimpleArtefact> _simpleRepresentationFactory = new ArtefactRepresentationFactory<SimpleArtefact>() {
+		ArtefactStringRepresentationFactory<SimpleArtefact> _simpleRepresentationFactory = new ArtefactStringRepresentationFactory<SimpleArtefact>() {
 
 			@Override
-			public String createRepresentationFor(SimpleArtefact _anArtefact) {
+			public String createStringRepresentationFor(SimpleArtefact _anArtefact) {
 				return _anArtefact.getId();
 			}
 		};
 
-		CSVGraphWriter<SimpleArtefact> _graphWriter = new CSVGraphWriter<SimpleArtefact>();
+		CSVGraphWriter<SimpleArtefact, SimpleRelation> _graphWriter = new CSVGraphWriter<SimpleArtefact, SimpleRelation>();
 
 		folder.create();
 		File _file = folder.newFile();

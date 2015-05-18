@@ -19,8 +19,8 @@ import java.io.IOException;
 
 import org.structome.core.Graph;
 
-public interface GraphLoader<T> {
+public interface GraphLoader<N extends Artefact, E extends Relation, S> {
 
-	public void loadInto(Graph graph, ArtefactFactory<T> _factory) throws IOException;
+	public void loadInto(Graph<N, E> graph, ArtefactFactory<N, S> _factory) throws IOException;
 
 }

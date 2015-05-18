@@ -24,11 +24,11 @@ import java.io.PrintStream;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.structome.core.Artefact;
 import org.structome.core.ArtefactFactory;
 import org.structome.core.Graph;
 import org.structome.impl.SimpleArtefact;
 import org.structome.impl.SimpleGraph;
+import org.structome.impl.SimpleRelation;
 
 public class CSVFileGraphLoaderTests {
 	public static final String[] graph = { "A,B", "A,C", "B,D", "D,E" };
@@ -49,17 +49,18 @@ public class CSVFileGraphLoaderTests {
 
 		_printStream.close();
 
-		CSVFileGraphLoader _graphLoader = new CSVFileGraphLoader(_file);
+		CSVFileGraphLoader<SimpleArtefact, SimpleRelation> _graphLoader = new CSVFileGraphLoader<SimpleArtefact, SimpleRelation>(
+				_file);
 
-		ArtefactFactory<String> _factory = new ArtefactFactory<String>() {
+		ArtefactFactory<SimpleArtefact, String> _factory = new ArtefactFactory<SimpleArtefact, String>() {
 
 			@Override
-			public Artefact createArtefact(String _artefactRepresentation) {
+			public SimpleArtefact createArtefact(String _artefactRepresentation) {
 				return new SimpleArtefact(_artefactRepresentation);
 			}
 		};
 
-		Graph _graph = new SimpleGraph();
+		Graph<SimpleArtefact, SimpleRelation> _graph = new SimpleGraph<SimpleArtefact, SimpleRelation>();
 
 		_graphLoader.loadInto(_graph, _factory);
 
@@ -78,17 +79,18 @@ public class CSVFileGraphLoaderTests {
 
 		_printStream.close();
 
-		CSVFileGraphLoader _graphLoader = new CSVFileGraphLoader(_file);
+		CSVFileGraphLoader<SimpleArtefact, SimpleRelation> _graphLoader = new CSVFileGraphLoader<SimpleArtefact, SimpleRelation>(
+				_file);
 
-		ArtefactFactory<String> _factory = new ArtefactFactory<String>() {
+		ArtefactFactory<SimpleArtefact, String> _factory = new ArtefactFactory<SimpleArtefact, String>() {
 
 			@Override
-			public Artefact createArtefact(String _artefactRepresentation) {
+			public SimpleArtefact createArtefact(String _artefactRepresentation) {
 				return new SimpleArtefact(_artefactRepresentation);
 			}
 		};
 
-		Graph _graph = new SimpleGraph();
+		Graph<SimpleArtefact, SimpleRelation> _graph = new SimpleGraph<SimpleArtefact, SimpleRelation>();
 
 		_graphLoader.loadInto(_graph, _factory);
 

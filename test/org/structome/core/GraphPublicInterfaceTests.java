@@ -20,11 +20,9 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 
 import org.junit.Test;
-import org.structome.core.Artefact;
-import org.structome.core.Graph;
-import org.structome.core.GraphLoader;
 import org.structome.impl.SimpleArtefact;
 import org.structome.impl.SimpleGraph;
+import org.structome.impl.SimpleRelation;
 
 public class GraphPublicInterfaceTests {
 
@@ -50,22 +48,23 @@ public class GraphPublicInterfaceTests {
 	 */
 	@Test
 	public void testLoadGraph() throws IOException {
-		GraphLoader<String> _graphLoader = new GraphLoader<String>() {
+		GraphLoader<SimpleArtefact, SimpleRelation, String> _graphLoader = new GraphLoader<SimpleArtefact, SimpleRelation, String>() {
 			@Override
-			public void loadInto(Graph graph, ArtefactFactory<String> _factory) throws IOException {
-				Artefact _A = _factory.createArtefact("A");
+			public void loadInto(Graph<SimpleArtefact, SimpleRelation> graph,
+					ArtefactFactory<SimpleArtefact, String> _factory) throws IOException {
+				SimpleArtefact _A = _factory.createArtefact("A");
 				graph.addArtefact(_A);
 
-				Artefact _B = _factory.createArtefact("B");
+				SimpleArtefact _B = _factory.createArtefact("B");
 				graph.addArtefact(_B);
 
-				Artefact _C = _factory.createArtefact("C");
+				SimpleArtefact _C = _factory.createArtefact("C");
 				graph.addArtefact(_C);
 
-				Artefact _D = _factory.createArtefact("D");
+				SimpleArtefact _D = _factory.createArtefact("D");
 				graph.addArtefact(_D);
 
-				Artefact _E = _factory.createArtefact("E");
+				SimpleArtefact _E = _factory.createArtefact("E");
 				graph.addArtefact(_E);
 
 				graph.createRelation(_A, _B);
@@ -75,10 +74,10 @@ public class GraphPublicInterfaceTests {
 			}
 		};
 
-		ArtefactFactory<String> _factory = new ArtefactFactory<String>() {
+		ArtefactFactory<SimpleArtefact, String> _factory = new ArtefactFactory<SimpleArtefact, String>() {
 
 			@Override
-			public Artefact createArtefact(String _artefactRepresentation) {
+			public SimpleArtefact createArtefact(String _artefactRepresentation) {
 				return new SimpleArtefact(_artefactRepresentation);
 			}
 		};

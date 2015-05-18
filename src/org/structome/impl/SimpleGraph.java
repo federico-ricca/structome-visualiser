@@ -23,29 +23,30 @@ import java.util.Set;
 
 import org.structome.core.Artefact;
 import org.structome.core.Graph;
+import org.structome.core.Relation;
 
-public class SimpleGraph implements Graph {
-	private Map<String, Artefact> nodes = new HashMap<String, Artefact>();
-	private Map<String, Set<Artefact>> outboundRelations = new HashMap<String, Set<Artefact>>();
+public class SimpleGraph<N extends Artefact, E extends Relation> implements Graph<N, E> {
+	private Map<String, N> nodes = new HashMap<String, N>();
+	private Map<String, Set<N>> outboundRelations = new HashMap<String, Set<N>>();
 
 	@Override
-	public Collection<Artefact> artefacts() {
+	public Collection<N> artefacts() {
 		return nodes.values();
 	}
 
 	@Override
-	public void addArtefact(final Artefact _artefact) {
+	public void addArtefact(final N _artefact) {
 		nodes.put(_artefact.getId(), _artefact);
 	}
 
 	@Override
-	public void createRelation(Artefact _artefactA, Artefact _artefactB) {
+	public void createRelation(N _artefactA, N _artefactB) {
 		String _sourceId = _artefactA.getId();
 
-		Set<Artefact> _referencedArtefacts = outboundRelations.get(_sourceId);
+		Set<N> _referencedArtefacts = outboundRelations.get(_sourceId);
 
 		if (_referencedArtefacts == null) {
-			_referencedArtefacts = new HashSet<Artefact>();
+			_referencedArtefacts = new HashSet<N>();
 
 			outboundRelations.put(_sourceId, _referencedArtefacts);
 		}
@@ -59,8 +60,13 @@ public class SimpleGraph implements Graph {
 	}
 
 	@Override
-	public Collection<Artefact> getRelationsFor(String _id) {
+	public Collection<N> getRelationsFor(String _id) {
 		return outboundRelations.get(_id);
+	}
+
+	@Override
+	public N getArtefact(String _id) {
+		return nodes.get(_id);
 	}
 
 }

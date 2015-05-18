@@ -15,8 +15,8 @@
  ***************************************************************************/
 package org.structome.core;
 
-public interface ArtefactFactory<T> {
+public interface ArtefactFactory<T extends Artefact, S> {
 
-	public Artefact createArtefact(T _artefactRepresentation);
+	public T createArtefact(S _artefactRepresentation);
 
 }
