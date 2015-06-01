@@ -13,12 +13,24 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-package org.structome.core;
+package org.structome.helpers;
 
-import java.util.Collection;
+public class SourceArtefactRepresentation {
 
-public interface ArtefactProcessor<T extends Artefact, S> {
+	private String number;
+	private String id;
 
-	Collection<S> process(Collection<T> _artefacts);
+	public SourceArtefactRepresentation(SourceArtefact _artefact) {
+		number = String.valueOf(_artefact.getANumber());
+		id = _artefact.getId();
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public String getId() {
+		return id;
+	}
 
 }

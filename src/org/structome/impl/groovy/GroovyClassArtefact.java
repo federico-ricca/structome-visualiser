@@ -13,12 +13,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-package org.structome.core;
+package org.structome.impl.groovy;
 
-import java.util.Collection;
+import org.structome.core.Artefact;
 
-public interface ArtefactProcessor<T extends Artefact, S> {
+public class GroovyClassArtefact implements Artefact {
 
-	Collection<S> process(Collection<T> _artefacts);
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -13,12 +13,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-package org.structome.core;
+package org.structome.helpers;
 
-import java.util.Collection;
+import org.structome.core.Artefact;
 
-public interface ArtefactProcessor<T extends Artefact, S> {
+public final class TargetArtefact implements Artefact {
+	private String id;
+	private String numberAsString;
+	
+	public TargetArtefact(String _id, String _number) {
+		id = _id;
+		numberAsString = _number;
+	}
 
-	Collection<S> process(Collection<T> _artefacts);
+	@Override
+	public String getId() {
+		return id;
+	}
 
+	public String getNumberAsString() {
+		return numberAsString;
+	}
 }

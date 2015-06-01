@@ -13,12 +13,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-package org.structome.core;
+package org.structome.impl.groovy;
 
-import java.util.Collection;
+import java.io.File;
 
-public interface ArtefactProcessor<T extends Artefact, S> {
+import org.structome.core.Artefact;
 
-	Collection<S> process(Collection<T> _artefacts);
+public class GroovyFileArtefact implements Artefact {
+	private File sourceFile;
+	
+	public GroovyFileArtefact(final File _f) {
+		sourceFile = _f;
+	}
+
+	@Override
+	public String getId() {
+		return sourceFile.getAbsolutePath();
+	}
 
 }

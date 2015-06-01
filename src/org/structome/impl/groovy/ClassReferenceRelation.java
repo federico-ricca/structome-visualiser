@@ -13,12 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-package org.structome.core;
+package org.structome.impl.groovy;
 
-import java.util.Collection;
+import org.structome.core.Relation;
 
-public interface ArtefactProcessor<T extends Artefact, S> {
-
-	Collection<S> process(Collection<T> _artefacts);
+public class ClassReferenceRelation implements Relation {
 
 }

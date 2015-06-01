@@ -1,3 +1,18 @@
+/*************************************************************************** 
+   Copyright 2015 Federico Ricca
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ ***************************************************************************/
 package org.structome;
 
 import static org.junit.Assert.assertEquals;
@@ -13,6 +28,9 @@ import org.structome.core.ArtefactFactory;
 import org.structome.core.ArtefactProcessor;
 import org.structome.core.Graph;
 import org.structome.core.GraphBuilder;
+import org.structome.helpers.SourceArtefact;
+import org.structome.helpers.SourceArtefactRepresentation;
+import org.structome.helpers.TargetArtefact;
 import org.structome.impl.SimpleGraph;
 import org.structome.impl.SimpleRelation;
 
@@ -50,13 +68,20 @@ public class ArtefactToArtefactProcessing {
 		GraphBuilder<TargetArtefact, SimpleRelation, SourceArtefactRepresentation> _builder = new GraphBuilder<TargetArtefact, SimpleRelation, SourceArtefactRepresentation>() {
 
 			@Override
+			public Graph<TargetArtefact, SimpleRelation> buildFrom(SourceArtefactRepresentation _source,
+					ArtefactFactory<TargetArtefact, SourceArtefactRepresentation> _factory) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
 			public Graph<TargetArtefact, SimpleRelation> buildFrom(
-					Collection<SourceArtefactRepresentation> _sources,
+					Collection<SourceArtefactRepresentation> _source,
 					ArtefactFactory<TargetArtefact, SourceArtefactRepresentation> _factory) {
 
 				Graph<TargetArtefact, SimpleRelation> _graph = new SimpleGraph<TargetArtefact, SimpleRelation>();
 
-				for (SourceArtefactRepresentation _rep : _sources) {
+				for (SourceArtefactRepresentation _rep : _source) {
 					TargetArtefact _artefact = _factory.createArtefact(_rep);
 
 					_graph.addArtefact(_artefact);
@@ -68,7 +93,6 @@ public class ArtefactToArtefactProcessing {
 
 				return _graph;
 			}
-
 		};
 
 		ArtefactFactory<TargetArtefact, SourceArtefactRepresentation> _factory = new ArtefactFactory<TargetArtefact, SourceArtefactRepresentation>() {
@@ -110,6 +134,13 @@ public class ArtefactToArtefactProcessing {
 				_graph.createRelation(_s0, _s4);
 
 				return _graph;
+			}
+
+			@Override
+			public Graph<TargetArtefact, SimpleRelation> buildFrom(SourceArtefact _source,
+					ArtefactFactory<TargetArtefact, SourceArtefact> _factory) {
+				// TODO Auto-generated method stub
+				return null;
 			}
 
 		};
