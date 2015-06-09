@@ -40,33 +40,31 @@ import org.structome.impl.groovy.GroovyFileArtefact;
 public class GroovyClassArtefactsProcessing {
 	static String[] sourceCodeA = { 
 		"package some.package;", 
-		"class BaseClass {",
+		"class BaseClass {", 
 		"}" };
 
 	static String[] sourceCodeB = { 
 		"package some.package;", 
 		"class TestClassA extends BaseClass {",
-		"	public List<ClassB> myList;",
+		"	public List<ClassB> myList;", 
 		"	public ReturnValue testMethod(Set<ClassC> _set) {",
-		"		Map<ClassD, ClassE> _map = [:];",
+		"		Map<ClassD, ClassE> _map = [:];", 
 		"		SomeClass.someStaticMethod(0);",
-		"		if (_set instanceof AnotherClass) {",
+		"		if (_set instanceof AnotherClass) {", 
 		"			BaseClass p = (SomeOtherClass) _set;", 
 		"		}",
-		"		return null;",
-		"	}",
+		"		return null;", "	}", 
 		"}" };
 
 	static String[] sourceCodeC = { 
 		"package some.package;", 
 		"class AnotherClass extends BaseClass {",
-		"	public void testMethod() {",
-		"	}",
-		"}" };
+		"	public void testMethod() {", "	}", "}" };
 
-	static String[][] sources = { sourceCodeA , sourceCodeB, sourceCodeC };
-	
+	static String[][] sources = { sourceCodeA, sourceCodeB, sourceCodeC };
+
 	Collection<GroovyFileArtefact> sourceArtefacts;
+	GroovyFileArtefact fileArtefact;
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
@@ -80,25 +78,44 @@ public class GroovyClassArtefactsProcessing {
 		for (String[] _sourceCode : sources) {
 			// Create temporary folder and file for source code
 			File _f = folder.newFile();
-			
+
 			PrintStream _ps = new PrintStream(_f);
 			for (String s : _sourceCode) {
 				_ps.println(s);
 			}
 			_ps.close();
-			
+
 			sourceArtefacts.add(new GroovyFileArtefact(_f));
 		}
 
+		File _f = folder.newFile();
+
+		PrintStream _ps = new PrintStream(_f);
+		for (String s : sourceCodeA) {
+			_ps.println(s);
+		}
+		_ps.close();
+
+		fileArtefact = new GroovyFileArtefact(_f);
 	}
 
 	@Test
 	public void groovyFileArtefactToGroovyClassArtefact() {
+		GroovyClassArtefactFactory _factory = new GroovyClassArtefactFactory();
+
+		GroovyClassArtefact _classArtefact = _factory.createArtefact(fileArtefact);
+
+		assertNotNull(_classArtefact);
+		assertEquals("some.package.BaseClass", _classArtefact.getId());
+	}
+
+	@Test
+	public void createClassDependencyGraphFromSourceCode() {
 		GraphBuilder<GroovyClassArtefact, ClassReferenceRelation, GroovyFileArtefact> _builder = new GraphBuilder<GroovyClassArtefact, ClassReferenceRelation, GroovyFileArtefact>() {
 
 			@Override
-			public Graph<GroovyClassArtefact, ClassReferenceRelation> buildFrom(GroovyFileArtefact _source,
-					ArtefactFactory<GroovyClassArtefact, GroovyFileArtefact> _factory) {
+			public final Graph<GroovyClassArtefact, ClassReferenceRelation> buildFrom(final GroovyFileArtefact _source,
+					final ArtefactFactory<GroovyClassArtefact, GroovyFileArtefact> _factory) {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -108,22 +125,24 @@ public class GroovyClassArtefactsProcessing {
 					Collection<GroovyFileArtefact> _sources,
 					ArtefactFactory<GroovyClassArtefact, GroovyFileArtefact> _factory) {
 				GroovyClassDependencyGraph _graph = new GroovyClassDependencyGraph();
-				
+
 				for (GroovyFileArtefact _source : _sources) {
 					GroovyClassArtefact _classArtefact = _factory.createArtefact(_source);
 					_graph.addArtefact(_classArtefact);
+					
 				}
 				return _graph;
 			}
 		};
 
 		GroovyClassArtefactFactory _factory = new GroovyClassArtefactFactory();
-		
-		Graph<GroovyClassArtefact, ClassReferenceRelation> _graph = _builder.buildFrom(sourceArtefacts, _factory);
-		
+
+		Graph<GroovyClassArtefact, ClassReferenceRelation> _graph = _builder.buildFrom(sourceArtefacts,
+				_factory);
+
 		assertNotNull(_graph);
-		//assertNotNull(_graph.getArtefact("some.package.BaseClass"));
+		assertNotNull(_graph.getArtefact("some.package.BaseClass"));
 		//assertNotNull(_graph.getRelationsFor("some.package.BaseClass"));
-		//assertEquals(2, _graph.getRelationsFor("some.package.BaseClass"));
+		// assertEquals(2, _graph.getRelationsFor("some.package.BaseClass"));
 	}
 }

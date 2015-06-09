@@ -25,9 +25,9 @@ import org.structome.core.Artefact;
 import org.structome.core.Graph;
 import org.structome.core.Relation;
 
-public class SimpleGraph<N extends Artefact, E extends Relation> implements Graph<N, E> {
+public class SimpleGraph<N extends Artefact, E extends Relation<N>> implements Graph<N, E> {
 	private Map<String, N> nodes = new HashMap<String, N>();
-	private Map<String, Set<N>> outboundRelations = new HashMap<String, Set<N>>();
+	private Map<String, Set<E>> outboundRelations = new HashMap<String, Set<E>>();
 
 	@Override
 	public Collection<N> artefacts() {
@@ -40,18 +40,18 @@ public class SimpleGraph<N extends Artefact, E extends Relation> implements Grap
 	}
 
 	@Override
-	public void createRelation(N _artefactA, N _artefactB) {
-		String _sourceId = _artefactA.getId();
+	public void addRelation(E _relation) {
+		String _sourceId = _relation.getSource().getId();
 
-		Set<N> _referencedArtefacts = outboundRelations.get(_sourceId);
+		Set<E> _relations = outboundRelations.get(_sourceId);
 
-		if (_referencedArtefacts == null) {
-			_referencedArtefacts = new HashSet<N>();
+		if (_relations == null) {
+			_relations = new HashSet<E>();
 
-			outboundRelations.put(_sourceId, _referencedArtefacts);
+			outboundRelations.put(_sourceId, _relations);
 		}
 
-		_referencedArtefacts.add(_artefactB);
+		_relations.add(_relation);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class SimpleGraph<N extends Artefact, E extends Relation> implements Grap
 	}
 
 	@Override
-	public Collection<N> getRelationsFor(String _id) {
+	public Collection<E> getRelationsFor(String _id) {
 		return outboundRelations.get(_id);
 	}
 

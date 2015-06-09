@@ -16,10 +16,20 @@
 package org.structome.impl.groovy;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.structome.core.Graph;
 
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
+
 public class GroovyClassDependencyGraph implements Graph<GroovyClassArtefact, ClassReferenceRelation> {
+	private UndirectedSparseMultigraph<GroovyClassArtefact, ClassReferenceRelation> graph;
+	private HashMap<String, GroovyClassArtefact> artefactMap;
+
+	public GroovyClassDependencyGraph() {
+		graph = new UndirectedSparseMultigraph<GroovyClassArtefact, ClassReferenceRelation>();
+		artefactMap = new HashMap<String, GroovyClassArtefact>();
+	}
 
 	@Override
 	public Collection<GroovyClassArtefact> artefacts() {
@@ -28,19 +38,19 @@ public class GroovyClassDependencyGraph implements Graph<GroovyClassArtefact, Cl
 	}
 
 	@Override
-	public void createRelation(GroovyClassArtefact _artefactA, GroovyClassArtefact _artefactB) {
+	public void addRelation(ClassReferenceRelation _relation) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void addArtefact(GroovyClassArtefact _artefact) {
-		// TODO Auto-generated method stub
-		
+		graph.addVertex(_artefact);
+		artefactMap.put(_artefact.getId(), _artefact);
 	}
 
 	@Override
-	public Collection<GroovyClassArtefact> getRelationsFor(String _id) {
+	public Collection<ClassReferenceRelation> getRelationsFor(String _id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -53,8 +63,7 @@ public class GroovyClassDependencyGraph implements Graph<GroovyClassArtefact, Cl
 
 	@Override
 	public GroovyClassArtefact getArtefact(String _id) {
-		// TODO Auto-generated method stub
-		return null;
+		return artefactMap.get(_id);
 	}
 
 }

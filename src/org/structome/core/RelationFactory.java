@@ -15,20 +15,8 @@
  ***************************************************************************/
 package org.structome.core;
 
-import java.util.Collection;
+public interface RelationFactory<E extends Relation<N>, N extends Artefact> {
 
-public interface Graph<N extends Artefact, E extends Relation<N>> {
-
-	public Collection<N> artefacts();
-
-	public void addRelation(final E _relation);
-
-	public void addArtefact(final N _artefact);
-
-	public Collection<E> getRelationsFor(String _id);
-
-	public boolean hasRelations(String _id);
-
-	public N getArtefact(String _id);
+	public E createRelation(N _source, N _dest);
 
 }

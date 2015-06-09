@@ -17,7 +17,7 @@ package org.structome.core;
 
 import java.util.Collection;
 
-public interface GraphBuilder<N extends Artefact, E extends Relation, S> {
+public interface GraphBuilder<N extends Artefact, E extends Relation<N>, S> {
 
 	public Graph<N, E> buildFrom(S _source, ArtefactFactory<N, S> _factory);
 

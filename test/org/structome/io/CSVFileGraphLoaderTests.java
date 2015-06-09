@@ -29,6 +29,7 @@ import org.structome.core.Graph;
 import org.structome.impl.SimpleArtefact;
 import org.structome.impl.SimpleGraph;
 import org.structome.impl.SimpleRelation;
+import org.structome.impl.SimpleRelationFactory;
 
 public class CSVFileGraphLoaderTests {
 	public static final String[] graph = { "A,B", "A,C", "B,D", "D,E" };
@@ -62,7 +63,7 @@ public class CSVFileGraphLoaderTests {
 
 		Graph<SimpleArtefact, SimpleRelation> _graph = new SimpleGraph<SimpleArtefact, SimpleRelation>();
 
-		_graphLoader.loadInto(_graph, _factory);
+		_graphLoader.loadInto(_graph, _factory, new SimpleRelationFactory());
 
 		assertEquals(5, _graph.artefacts().size());
 	}
@@ -92,7 +93,7 @@ public class CSVFileGraphLoaderTests {
 
 		Graph<SimpleArtefact, SimpleRelation> _graph = new SimpleGraph<SimpleArtefact, SimpleRelation>();
 
-		_graphLoader.loadInto(_graph, _factory);
+		_graphLoader.loadInto(_graph, _factory, new SimpleRelationFactory());
 
 		assertEquals(7, _graph.artefacts().size());
 	}

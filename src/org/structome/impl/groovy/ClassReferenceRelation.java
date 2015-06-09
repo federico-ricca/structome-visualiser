@@ -17,6 +17,23 @@ package org.structome.impl.groovy;
 
 import org.structome.core.Relation;
 
-public class ClassReferenceRelation implements Relation {
+public class ClassReferenceRelation implements Relation<GroovyClassArtefact> {
+	public GroovyClassArtefact source;
+	public GroovyClassArtefact destination;
+
+	public ClassReferenceRelation(GroovyClassArtefact _source, GroovyClassArtefact _dest) {
+		source = _source;
+		destination = _dest;
+	}
+
+	@Override
+	public GroovyClassArtefact getSource() {
+		return source;
+	}
+
+	@Override
+	public GroovyClassArtefact getDestination() {
+		return destination;
+	}
 
 }

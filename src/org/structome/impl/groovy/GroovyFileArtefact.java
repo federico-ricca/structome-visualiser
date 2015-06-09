@@ -31,4 +31,8 @@ public class GroovyFileArtefact implements Artefact {
 		return sourceFile.getAbsolutePath();
 	}
 
+	public File getSourceFile() {
+		return sourceFile;
+	}
+
 }

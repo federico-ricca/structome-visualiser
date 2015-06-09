@@ -13,22 +13,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-package org.structome.core;
+package org.structome.impl;
 
-import java.util.Collection;
+import org.structome.core.RelationFactory;
 
-public interface Graph<N extends Artefact, E extends Relation<N>> {
+public class SimpleRelationFactory implements RelationFactory<SimpleRelation, SimpleArtefact> {
 
-	public Collection<N> artefacts();
-
-	public void addRelation(final E _relation);
-
-	public void addArtefact(final N _artefact);
-
-	public Collection<E> getRelationsFor(String _id);
-
-	public boolean hasRelations(String _id);
-
-	public N getArtefact(String _id);
+	@Override
+	public SimpleRelation createRelation(SimpleArtefact _source, SimpleArtefact _dest) {
+		return new SimpleRelation(_source, _dest);
+	}
 
 }

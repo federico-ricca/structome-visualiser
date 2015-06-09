@@ -51,9 +51,9 @@ public class CSVFileGraphWriterTests {
 		_graph.addArtefact(_c);
 		_graph.addArtefact(_d);
 
-		_graph.createRelation(_a, _b);
-		_graph.createRelation(_a, _c);
-		_graph.createRelation(_c, _d);
+		_graph.addRelation(new SimpleRelation(_a, _b));
+		_graph.addRelation(new SimpleRelation(_a, _c));
+		_graph.addRelation(new SimpleRelation(_c, _d));
 
 		ArtefactStringRepresentationFactory<SimpleArtefact> _simpleRepresentationFactory = new ArtefactStringRepresentationFactory<SimpleArtefact>() {
 

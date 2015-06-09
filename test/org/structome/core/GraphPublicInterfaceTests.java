@@ -23,20 +23,9 @@ import org.junit.Test;
 import org.structome.impl.SimpleArtefact;
 import org.structome.impl.SimpleGraph;
 import org.structome.impl.SimpleRelation;
+import org.structome.impl.SimpleRelationFactory;
 
 public class GraphPublicInterfaceTests {
-
-	@Test
-	public void testNoDuplicateNodes() {
-		Graph _graph = new SimpleGraph();
-		Artefact _a = new SimpleArtefact("A");
-		Artefact _b = new SimpleArtefact("A");
-
-		_graph.addArtefact(_a);
-		_graph.addArtefact(_b);
-
-		assertEquals(1, _graph.artefacts().size());
-	}
 
 	/*
 	 * This test is designed to drive the public interface of Graph, Artefact,
@@ -51,7 +40,8 @@ public class GraphPublicInterfaceTests {
 		GraphLoader<SimpleArtefact, SimpleRelation, String> _graphLoader = new GraphLoader<SimpleArtefact, SimpleRelation, String>() {
 			@Override
 			public void loadInto(Graph<SimpleArtefact, SimpleRelation> graph,
-					ArtefactFactory<SimpleArtefact, String> _factory) throws IOException {
+					ArtefactFactory<SimpleArtefact, String> _factory,
+					RelationFactory<SimpleRelation, SimpleArtefact> _relationFactory) throws IOException {
 				SimpleArtefact _A = _factory.createArtefact("A");
 				graph.addArtefact(_A);
 
@@ -67,10 +57,10 @@ public class GraphPublicInterfaceTests {
 				SimpleArtefact _E = _factory.createArtefact("E");
 				graph.addArtefact(_E);
 
-				graph.createRelation(_A, _B);
-				graph.createRelation(_A, _C);
-				graph.createRelation(_B, _D);
-				graph.createRelation(_D, _E);
+				graph.addRelation(_relationFactory.createRelation(_A, _B));
+				graph.addRelation(_relationFactory.createRelation(_A, _C));
+				graph.addRelation(_relationFactory.createRelation(_B, _D));
+				graph.addRelation(_relationFactory.createRelation(_D, _E));
 			}
 		};
 
@@ -82,9 +72,9 @@ public class GraphPublicInterfaceTests {
 			}
 		};
 
-		Graph graph = new SimpleGraph();
+		Graph<SimpleArtefact, SimpleRelation> graph = new SimpleGraph<SimpleArtefact, SimpleRelation>();
 
-		_graphLoader.loadInto(graph, _factory);
+		_graphLoader.loadInto(graph, _factory, new SimpleRelationFactory());
 
 		assertEquals(5, graph.artefacts().size());
 		assertEquals(2, graph.getRelationsFor("A").size());

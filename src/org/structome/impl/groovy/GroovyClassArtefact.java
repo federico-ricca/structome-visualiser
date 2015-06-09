@@ -19,10 +19,44 @@ import org.structome.core.Artefact;
 
 public class GroovyClassArtefact implements Artefact {
 
+	private String className;
+	private String superClassName;
+	private String packageName;
+	
 	@Override
-	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
+	public final String getId() {
+		return packageName + "." + className;
+	}
+
+	public void setClassName(String _nameWithoutPackage) {
+		className = _nameWithoutPackage;
+	}
+
+	public void addGenerics(String nameWithoutPackage) {
+		// TODO add class generic
+	}
+
+	public void setSuperClassName(String _nameWithoutPackage) {
+		superClassName = _nameWithoutPackage;
+	}
+
+	public void addSuperClassGenerics(String nameWithoutPackage) {
+		// TODO add super class generics
+		
+	}
+
+	public void addImport(String _import) {
+		// TODO add import
+		
+	}
+
+	public void addAnnotation(String _annotation) {
+		// TODO add annotation
+		
+	}
+
+	public void setPackageName(String name) {
+		packageName = name;
 	}
 
 }

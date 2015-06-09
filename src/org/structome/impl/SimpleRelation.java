@@ -17,6 +17,23 @@ package org.structome.impl;
 
 import org.structome.core.Relation;
 
-public class SimpleRelation implements Relation {
+public class SimpleRelation implements Relation<SimpleArtefact> {
+	private SimpleArtefact source;
+	private SimpleArtefact destination;
+
+	public SimpleRelation(SimpleArtefact _source, SimpleArtefact _destination) {
+		source = _source;
+		destination = _destination;
+	}
+
+	@Override
+	public SimpleArtefact getSource() {
+		return source;
+	}
+
+	@Override
+	public SimpleArtefact getDestination() {
+		return destination;
+	}
 
 }
