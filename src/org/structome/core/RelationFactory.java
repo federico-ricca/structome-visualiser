@@ -15,7 +15,7 @@
  ***************************************************************************/
 package org.structome.core;
 
-public interface RelationFactory<E extends Relation<N>, N extends Artefact> {
+public interface RelationFactory<E extends Relation, N extends Artefact> {
 
 	public E createRelation(N _source, N _dest);
 

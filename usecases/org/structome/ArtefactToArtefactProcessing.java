@@ -16,7 +16,6 @@
 package org.structome;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,11 +28,12 @@ import org.structome.core.ArtefactFactory;
 import org.structome.core.ArtefactProcessor;
 import org.structome.core.Graph;
 import org.structome.core.GraphBuilder;
-import org.structome.core.RelationImpl;
+import org.structome.core.RelationArtefactPair;
 import org.structome.helpers.SourceArtefact;
 import org.structome.helpers.SourceArtefactRepresentation;
 import org.structome.helpers.TargetArtefact;
 import org.structome.impl.SimpleGraph;
+import org.structome.impl.SimpleRelation;
 
 public class ArtefactToArtefactProcessing {
 	Collection<SourceArtefact> _artefacts = new ArrayList<SourceArtefact>();
@@ -66,22 +66,21 @@ public class ArtefactToArtefactProcessing {
 
 		};
 
-		GraphBuilder<TargetArtefact, RelationImpl<TargetArtefact>, SourceArtefactRepresentation> _builder = new GraphBuilder<TargetArtefact, RelationImpl<TargetArtefact>, SourceArtefactRepresentation>() {
+		GraphBuilder<TargetArtefact, SimpleRelation, SourceArtefactRepresentation> _builder = new GraphBuilder<TargetArtefact, SimpleRelation, SourceArtefactRepresentation>() {
 
 			@Override
-			public Graph<TargetArtefact, RelationImpl<TargetArtefact>> buildFrom(
-					SourceArtefactRepresentation _source,
+			public Graph<TargetArtefact, SimpleRelation> buildFrom(SourceArtefactRepresentation _source,
 					ArtefactFactory<TargetArtefact, SourceArtefactRepresentation> _factory) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public Graph<TargetArtefact, RelationImpl<TargetArtefact>> buildFrom(
+			public Graph<TargetArtefact, SimpleRelation> buildFrom(
 					Collection<SourceArtefactRepresentation> _source,
 					ArtefactFactory<TargetArtefact, SourceArtefactRepresentation> _factory) {
 
-				Graph<TargetArtefact, RelationImpl<TargetArtefact>> _graph = new SimpleGraph<TargetArtefact, RelationImpl<TargetArtefact>>();
+				Graph<TargetArtefact, SimpleRelation> _graph = new SimpleGraph<TargetArtefact, SimpleRelation>();
 
 				for (SourceArtefactRepresentation _rep : _source) {
 					TargetArtefact _artefact = _factory.createArtefact(_rep);
@@ -91,10 +90,8 @@ public class ArtefactToArtefactProcessing {
 
 				TargetArtefact _s0 = _graph.getArtefact("0");
 				TargetArtefact _s4 = _graph.getArtefact("4");
-				RelationImpl<TargetArtefact> _rel = new RelationImpl<TargetArtefact>();
-				_rel.setSource(_s0);
-				_rel.setDestination(_s4);
-				_graph.addRelation(_rel);
+				SimpleRelation _rel = new SimpleRelation();
+				_graph.addRelation(_rel, _s0, _s4);
 
 				return _graph;
 			}
@@ -110,26 +107,26 @@ public class ArtefactToArtefactProcessing {
 			}
 		};
 
-		Graph<TargetArtefact, RelationImpl<TargetArtefact>> _graph = _builder.buildFrom(
-				_processor.process(_artefacts), _factory);
+		Graph<TargetArtefact, SimpleRelation> _graph = _builder.buildFrom(_processor.process(_artefacts),
+				_factory);
 
-		Vector<RelationImpl<TargetArtefact>> _relations = new Vector<RelationImpl<TargetArtefact>>(_graph.getRelationsFor("0"));
+		Vector<RelationArtefactPair<SimpleRelation, TargetArtefact>> _relations = new Vector<RelationArtefactPair<SimpleRelation, TargetArtefact>>(
+				_graph.getRelationsFor("0"));
 
 		assertEquals(5, _graph.artefacts().size());
 		assertEquals(1, _graph.getRelationsFor("0").size());
-		assertEquals("4", _relations.get(0).getDestination().getId());
+		assertEquals("4", _relations.get(0).getArtefact().getId());
 	}
 
 	@Test
 	public void artefactToArtefact() {
-		GraphBuilder<TargetArtefact, RelationImpl<TargetArtefact>, SourceArtefact> _builder = new GraphBuilder<TargetArtefact, RelationImpl<TargetArtefact>, SourceArtefact>() {
+		GraphBuilder<TargetArtefact, SimpleRelation, SourceArtefact> _builder = new GraphBuilder<TargetArtefact, SimpleRelation, SourceArtefact>() {
 
 			@Override
-			public Graph<TargetArtefact, RelationImpl<TargetArtefact>> buildFrom(
-					Collection<SourceArtefact> _sources,
+			public Graph<TargetArtefact, SimpleRelation> buildFrom(Collection<SourceArtefact> _sources,
 					ArtefactFactory<TargetArtefact, SourceArtefact> _factory) {
 
-				Graph<TargetArtefact, RelationImpl<TargetArtefact>> _graph = new SimpleGraph<TargetArtefact, RelationImpl<TargetArtefact>>();
+				Graph<TargetArtefact, SimpleRelation> _graph = new SimpleGraph<TargetArtefact, SimpleRelation>();
 
 				for (SourceArtefact _rep : _sources) {
 					TargetArtefact _artefact = _factory.createArtefact(_rep);
@@ -139,16 +136,14 @@ public class ArtefactToArtefactProcessing {
 
 				TargetArtefact _s0 = _graph.getArtefact("0");
 				TargetArtefact _s4 = _graph.getArtefact("4");
-				RelationImpl<TargetArtefact> _rel = new RelationImpl<TargetArtefact>();
-				_rel.setSource(_s0);
-				_rel.setDestination(_s4);
-				_graph.addRelation(_rel);
+				SimpleRelation _rel = new SimpleRelation();
+				_graph.addRelation(_rel, _s0, _s4);
 
 				return _graph;
 			}
 
 			@Override
-			public Graph<TargetArtefact, RelationImpl<TargetArtefact>> buildFrom(SourceArtefact _source,
+			public Graph<TargetArtefact, SimpleRelation> buildFrom(SourceArtefact _source,
 					ArtefactFactory<TargetArtefact, SourceArtefact> _factory) {
 				// TODO Auto-generated method stub
 				return null;
@@ -165,12 +160,13 @@ public class ArtefactToArtefactProcessing {
 			}
 		};
 
-		Graph<TargetArtefact, RelationImpl<TargetArtefact>> _graph = _builder.buildFrom(_artefacts, _factory);
+		Graph<TargetArtefact, SimpleRelation> _graph = _builder.buildFrom(_artefacts, _factory);
 
-		Vector<RelationImpl<TargetArtefact>> _relations = new Vector<RelationImpl<TargetArtefact>>(_graph.getRelationsFor("0"));
+		Vector<RelationArtefactPair<SimpleRelation, TargetArtefact>> _relations = new Vector<RelationArtefactPair<SimpleRelation, TargetArtefact>>(
+				_graph.getRelationsFor("0"));
 
 		assertEquals(5, _graph.artefacts().size());
 		assertEquals(1, _relations.size());
-		assertEquals("4", _relations.get(0).getDestination().getId());
+		assertEquals("4", _relations.get(0).getArtefact().getId());
 	}
 }

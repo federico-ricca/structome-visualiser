@@ -18,7 +18,7 @@ package org.structome.core;
 import java.io.File;
 import java.io.IOException;
 
-public interface GraphWriter<N extends Artefact, E extends Relation<N>> {
+public interface GraphWriter<N extends Artefact, E extends Relation> {
 
 	public void write(Graph<N, E> _graph, File _file,
 			ArtefactStringRepresentationFactory<N> _representationFactory) throws IOException;

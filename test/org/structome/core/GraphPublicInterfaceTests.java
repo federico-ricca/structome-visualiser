@@ -57,10 +57,10 @@ public class GraphPublicInterfaceTests {
 				SimpleArtefact _E = _factory.createArtefact("E");
 				graph.addArtefact(_E);
 
-				graph.addRelation(_relationFactory.createRelation(_A, _B));
-				graph.addRelation(_relationFactory.createRelation(_A, _C));
-				graph.addRelation(_relationFactory.createRelation(_B, _D));
-				graph.addRelation(_relationFactory.createRelation(_D, _E));
+				graph.addRelation(_relationFactory.createRelation(_A, _B), _A, _B);
+				graph.addRelation(_relationFactory.createRelation(_A, _C), _A, _C);
+				graph.addRelation(_relationFactory.createRelation(_B, _D), _B, _D);
+				graph.addRelation(_relationFactory.createRelation(_D, _E), _D, _E);
 			}
 		};
 

@@ -15,7 +15,5 @@
  ***************************************************************************/
 package org.structome.core;
 
-public interface Relation<N extends Artefact> {
-	public N getSource();
-	public N getDestination();
+public interface Relation {
 }

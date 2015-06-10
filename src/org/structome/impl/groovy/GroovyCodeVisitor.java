@@ -65,23 +65,35 @@ public class GroovyCodeVisitor extends ClassCodeVisitorSupport {
 			}
 		}
 
+		super.visitClass(node);
+
 		ClassNode _superType = node.getSuperClass();
 
-		groovyClassArtefact.setSuperClassName(_superType.getNameWithoutPackage());
+		String _superClassName = _superType.getName();
+
+		if (_superClassName.indexOf(".") == -1) {
+			// no package information, infer from import statements
+			_superClassName = groovyClassArtefact.findImportByClass(_superClassName);
+
+			if (_superClassName == null) {
+				// super class does not appear on imports, append current
+				// package
+				_superClassName = groovyClassArtefact.getPackageName() + "." + _superType.getName();
+			}
+		}
+		groovyClassArtefact.setSuperClassName(_superClassName);
 
 		if (_superType.getGenericsTypes() != null) {
 			for (GenericsType _generics : _superType.getGenericsTypes()) {
 				groovyClassArtefact.addSuperClassGenerics(_generics.getType().getNameWithoutPackage());
 			}
 		}
-
-		super.visitClass(node);
 	}
 
 	@Override
 	public void visitImports(ModuleNode node) {
 		for (ImportNode importNode : node.getImports()) {
-			groovyClassArtefact.addImport(importNode.getType().getNameWithoutPackage());
+			groovyClassArtefact.addImport(importNode.getType().getName());
 		}
 		super.visitImports(node);
 	}
@@ -97,15 +109,14 @@ public class GroovyCodeVisitor extends ClassCodeVisitorSupport {
 	@Override
 	public void visitDeclarationExpression(DeclarationExpression expression) {
 		ClassNode _type = expression.getType();
-/*
-		groovyClassArtefact.add(_type.getNameWithoutPackage());
-
-		if (_type.getGenericsTypes() != null) {
-			for (GenericsType _generics : _type.getGenericsTypes()) {
-				groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
-			}
-		}
-*/
+		/*
+		 * groovyClassArtefact.add(_type.getNameWithoutPackage());
+		 * 
+		 * if (_type.getGenericsTypes() != null) { for (GenericsType _generics :
+		 * _type.getGenericsTypes()) {
+		 * groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
+		 * } }
+		 */
 		super.visitDeclarationExpression(expression);
 	}
 
@@ -118,42 +129,38 @@ public class GroovyCodeVisitor extends ClassCodeVisitorSupport {
 	@Override
 	public void visitMethod(MethodNode node) {
 		/*
-		for (Parameter _parameter : node.getParameters()) {
-			ClassNode _type = _parameter.getType();
-
-			groovyClassArtefact.add(_type.getNameWithoutPackage());
-
-			if (_type.getGenericsTypes() != null) {
-				for (GenericsType _generics : _type.getGenericsTypes()) {
-					groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
-				}
-			}
-		}
-
-		ClassNode _type = node.getReturnType();
-		groovyClassArtefact.add(_type.getNameWithoutPackage());
-
-		if (_type.getGenericsTypes() != null) {
-			for (GenericsType _generics : _type.getGenericsTypes()) {
-				groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
-			}
-		}
-*/
+		 * for (Parameter _parameter : node.getParameters()) { ClassNode _type =
+		 * _parameter.getType();
+		 * 
+		 * groovyClassArtefact.add(_type.getNameWithoutPackage());
+		 * 
+		 * if (_type.getGenericsTypes() != null) { for (GenericsType _generics :
+		 * _type.getGenericsTypes()) {
+		 * groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
+		 * } } }
+		 * 
+		 * ClassNode _type = node.getReturnType();
+		 * groovyClassArtefact.add(_type.getNameWithoutPackage());
+		 * 
+		 * if (_type.getGenericsTypes() != null) { for (GenericsType _generics :
+		 * _type.getGenericsTypes()) {
+		 * groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
+		 * } }
+		 */
 		super.visitMethod(node);
 	}
 
 	@Override
 	public void visitField(FieldNode node) {
 		/*
-		ClassNode _type = node.getType();
-		groovyClassArtefact.add(_type.getNameWithoutPackage());
-
-		if (_type.getGenericsTypes() != null) {
-			for (GenericsType _generics : _type.getGenericsTypes()) {
-				groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
-			}
-		}
-*/
+		 * ClassNode _type = node.getType();
+		 * groovyClassArtefact.add(_type.getNameWithoutPackage());
+		 * 
+		 * if (_type.getGenericsTypes() != null) { for (GenericsType _generics :
+		 * _type.getGenericsTypes()) {
+		 * groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
+		 * } }
+		 */
 		super.visitField(node);
 	}
 
@@ -166,16 +173,14 @@ public class GroovyCodeVisitor extends ClassCodeVisitorSupport {
 	@Override
 	public void visitMethodCallExpression(MethodCallExpression call) {
 		/*
-		if (call.getObjectExpression() instanceof VariableExpression) {
-			// receiver is a variable / class
-			VariableExpression _varExp = (VariableExpression) call.getObjectExpression();
-
-			if (_varExp.getAccessedVariable() == null) {
-				// no variable as receiver => static call
-				groovyClassArtefact.add(_varExp.getText());
-			}
-		}
-*/
+		 * if (call.getObjectExpression() instanceof VariableExpression) { //
+		 * receiver is a variable / class VariableExpression _varExp =
+		 * (VariableExpression) call.getObjectExpression();
+		 * 
+		 * if (_varExp.getAccessedVariable() == null) { // no variable as
+		 * receiver => static call groovyClassArtefact.add(_varExp.getText()); }
+		 * }
+		 */
 		super.visitMethodCallExpression(call);
 	}
 
@@ -187,15 +192,14 @@ public class GroovyCodeVisitor extends ClassCodeVisitorSupport {
 	@Override
 	public void visitCastExpression(CastExpression expression) {
 		/*
-		ClassNode _type = expression.getType();
-		groovyClassArtefact.add(_type.getNameWithoutPackage());
-
-		if (_type.getGenericsTypes() != null) {
-			for (GenericsType _generics : _type.getGenericsTypes()) {
-				groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
-			}
-		}
-*/
+		 * ClassNode _type = expression.getType();
+		 * groovyClassArtefact.add(_type.getNameWithoutPackage());
+		 * 
+		 * if (_type.getGenericsTypes() != null) { for (GenericsType _generics :
+		 * _type.getGenericsTypes()) {
+		 * groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
+		 * } }
+		 */
 		super.visitCastExpression(expression);
 	}
 
@@ -218,23 +222,22 @@ public class GroovyCodeVisitor extends ClassCodeVisitorSupport {
 	@Override
 	public void visitVariableExpression(VariableExpression expression) {
 		/*
-		ClassNode _type = expression.getType();
-		groovyClassArtefact.add(_type.getNameWithoutPackage());
-
-		if (_type.getGenericsTypes() != null) {
-			for (GenericsType _generics : _type.getGenericsTypes()) {
-				groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
-			}
-		}
-*/
+		 * ClassNode _type = expression.getType();
+		 * groovyClassArtefact.add(_type.getNameWithoutPackage());
+		 * 
+		 * if (_type.getGenericsTypes() != null) { for (GenericsType _generics :
+		 * _type.getGenericsTypes()) {
+		 * groovyClassArtefact.add(_generics.getType().getNameWithoutPackage());
+		 * } }
+		 */
 		super.visitVariableExpression(expression);
 	}
 
 	@Override
 	public void visitClassExpression(ClassExpression expression) {
 		/*
-		groovyClassArtefact.add(expression.getType().getNameWithoutPackage());
-		*/
+		 * groovyClassArtefact.add(expression.getType().getNameWithoutPackage());
+		 */
 		super.visitClassExpression(expression);
 	}
 
@@ -245,13 +248,13 @@ public class GroovyCodeVisitor extends ClassCodeVisitorSupport {
 	@Override
 	public void visitPackage(PackageNode node) {
 		super.visitPackage(node);
-		
+
 		String _packageName = node.getName();
-		
+
 		if (_packageName.endsWith(".")) {
-			_packageName = _packageName.substring(0, _packageName.length()-1);
+			_packageName = _packageName.substring(0, _packageName.length() - 1);
 		}
-		
+
 		groovyClassArtefact.setPackageName(_packageName);
 	}
 

@@ -21,7 +21,7 @@ public class SimpleRelationFactory implements RelationFactory<SimpleRelation, Si
 
 	@Override
 	public SimpleRelation createRelation(SimpleArtefact _source, SimpleArtefact _dest) {
-		return new SimpleRelation(_source, _dest);
+		return new SimpleRelation();
 	}
 
 }

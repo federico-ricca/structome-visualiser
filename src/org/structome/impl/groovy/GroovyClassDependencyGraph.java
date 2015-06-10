@@ -15,12 +15,16 @@
  ***************************************************************************/
 package org.structome.impl.groovy;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
 import org.structome.core.Graph;
+import org.structome.core.RelationArtefactPair;
 
 import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 
 public class GroovyClassDependencyGraph implements Graph<GroovyClassArtefact, ClassReferenceRelation> {
 	private UndirectedSparseMultigraph<GroovyClassArtefact, ClassReferenceRelation> graph;
@@ -33,14 +37,13 @@ public class GroovyClassDependencyGraph implements Graph<GroovyClassArtefact, Cl
 
 	@Override
 	public Collection<GroovyClassArtefact> artefacts() {
-		// TODO Auto-generated method stub
-		return null;
+		return graph.getVertices();
 	}
 
 	@Override
-	public void addRelation(ClassReferenceRelation _relation) {
-		// TODO Auto-generated method stub
-
+	public void addRelation(ClassReferenceRelation _relation, GroovyClassArtefact _source,
+			GroovyClassArtefact _dest) {
+		graph.addEdge(_relation, _source, _dest, EdgeType.UNDIRECTED);
 	}
 
 	@Override
@@ -50,9 +53,26 @@ public class GroovyClassDependencyGraph implements Graph<GroovyClassArtefact, Cl
 	}
 
 	@Override
-	public Collection<ClassReferenceRelation> getRelationsFor(String _id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<RelationArtefactPair<ClassReferenceRelation, GroovyClassArtefact>> getRelationsFor(
+			String _id) {
+		Collection<RelationArtefactPair<ClassReferenceRelation, GroovyClassArtefact>> _relations = new ArrayList<RelationArtefactPair<ClassReferenceRelation, GroovyClassArtefact>>();
+
+		GroovyClassArtefact _targetArtefact = artefactMap.get(_id);
+		
+		Collection<ClassReferenceRelation> _edges = graph.getIncidentEdges(_targetArtefact);
+
+		for (ClassReferenceRelation _edge : _edges) {
+			Pair<GroovyClassArtefact> _pair = graph.getEndpoints(_edge);
+			
+			if (_targetArtefact.equals(_pair.getFirst())) {
+				_relations.add(new RelationArtefactPair<ClassReferenceRelation, GroovyClassArtefact>(_edge, _pair.getSecond()));
+			}
+			else if (_targetArtefact.equals(_pair.getSecond())) {
+				_relations.add(new RelationArtefactPair<ClassReferenceRelation, GroovyClassArtefact>(_edge, _pair.getFirst()));
+			}
+		}
+		
+		return _relations;
 	}
 
 	@Override
@@ -65,5 +85,4 @@ public class GroovyClassDependencyGraph implements Graph<GroovyClassArtefact, Cl
 	public GroovyClassArtefact getArtefact(String _id) {
 		return artefactMap.get(_id);
 	}
-
 }

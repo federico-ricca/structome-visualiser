@@ -25,8 +25,9 @@ import org.structome.core.ArtefactStringRepresentationFactory;
 import org.structome.core.Graph;
 import org.structome.core.GraphWriter;
 import org.structome.core.Relation;
+import org.structome.core.RelationArtefactPair;
 
-public class CSVGraphWriter<N extends Artefact, E extends Relation<N>> implements GraphWriter<N, E> {
+public class CSVGraphWriter<N extends Artefact, E extends Relation> implements GraphWriter<N, E> {
 
 	@Override
 	public void write(Graph<N, E> _graph, File _file,
@@ -35,13 +36,13 @@ public class CSVGraphWriter<N extends Artefact, E extends Relation<N>> implement
 
 		Collection<N> _artefacts = _graph.artefacts();
 
-		for (Artefact _anArtefact : _artefacts) {
-			final String _source = _representationFactory.createStringRepresentationFor((N) _anArtefact);
+		for (N _anArtefact : _artefacts) {
+			final String _source = _representationFactory.createStringRepresentationFor(_anArtefact);
 
 			if (_graph.hasRelations(_anArtefact.getId())) {
-				for (Relation<N> _relation : _graph.getRelationsFor(_anArtefact.getId())) {
-					String _target = _representationFactory.createStringRepresentationFor(_relation
-							.getDestination());
+				for (RelationArtefactPair<E, N> _relationDesc : _graph.getRelationsFor(_anArtefact.getId())) {
+					String _target = _representationFactory.createStringRepresentationFor(_relationDesc
+							.getArtefact());
 
 					_printStream.println(_source + "," + _target);
 				}

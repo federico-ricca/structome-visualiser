@@ -31,6 +31,7 @@ import org.junit.rules.TemporaryFolder;
 import org.structome.core.ArtefactFactory;
 import org.structome.core.Graph;
 import org.structome.core.GraphBuilder;
+import org.structome.core.RelationArtefactPair;
 import org.structome.impl.groovy.ClassReferenceRelation;
 import org.structome.impl.groovy.GroovyClassArtefact;
 import org.structome.impl.groovy.GroovyClassArtefactFactory;
@@ -53,13 +54,16 @@ public class GroovyClassArtefactsProcessing {
 		"		if (_set instanceof AnotherClass) {", 
 		"			BaseClass p = (SomeOtherClass) _set;", 
 		"		}",
-		"		return null;", "	}", 
+		"		return null;", 
+		"	}", 
 		"}" };
 
 	static String[] sourceCodeC = { 
 		"package some.package;", 
 		"class AnotherClass extends BaseClass {",
-		"	public void testMethod() {", "	}", "}" };
+		"	public void testMethod() {", 
+		"	}", 
+		"}" };
 
 	static String[][] sources = { sourceCodeA, sourceCodeB, sourceCodeC };
 
@@ -107,6 +111,7 @@ public class GroovyClassArtefactsProcessing {
 
 		assertNotNull(_classArtefact);
 		assertEquals("some.package.BaseClass", _classArtefact.getId());
+		assertEquals("some.package", _classArtefact.getPackageName());
 	}
 
 	@Test
@@ -129,8 +134,16 @@ public class GroovyClassArtefactsProcessing {
 				for (GroovyFileArtefact _source : _sources) {
 					GroovyClassArtefact _classArtefact = _factory.createArtefact(_source);
 					_graph.addArtefact(_classArtefact);
-					
 				}
+				
+				for (GroovyClassArtefact _artefact : _graph.artefacts()) {
+					String _superClassId = _artefact.getSuperClassId();
+					
+					if (_superClassId != null) {
+						_graph.addRelation(new ClassReferenceRelation(), _artefact, _graph.getArtefact(_superClassId));
+					}
+				}
+				
 				return _graph;
 			}
 		};
@@ -140,9 +153,13 @@ public class GroovyClassArtefactsProcessing {
 		Graph<GroovyClassArtefact, ClassReferenceRelation> _graph = _builder.buildFrom(sourceArtefacts,
 				_factory);
 
-		assertNotNull(_graph);
+		assertNotNull(_graph);		
 		assertNotNull(_graph.getArtefact("some.package.BaseClass"));
-		//assertNotNull(_graph.getRelationsFor("some.package.BaseClass"));
+		
+		Collection<RelationArtefactPair<ClassReferenceRelation, GroovyClassArtefact>> _relations = _graph.getRelationsFor("some.package.BaseClass");
+		
+		assertNotNull(_relations);
+		assertEquals(2, _relations.size());
 		// assertEquals(2, _graph.getRelationsFor("some.package.BaseClass"));
 	}
 }

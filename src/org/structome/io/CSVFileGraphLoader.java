@@ -27,7 +27,7 @@ import org.structome.core.RelationFactory;
 import org.structome.util.TextFileReader;
 import org.structome.util.TextFileReader.LineVisitor;
 
-public class CSVFileGraphLoader<N extends Artefact, E extends Relation<N>> implements GraphLoader<N, E, String> {
+public class CSVFileGraphLoader<N extends Artefact, E extends Relation> implements GraphLoader<N, E, String> {
 	private File csvFile;
 
 	public CSVFileGraphLoader(String _filename) {
@@ -60,7 +60,7 @@ public class CSVFileGraphLoader<N extends Artefact, E extends Relation<N>> imple
 					_graph.addArtefact(_dest);
 					E _rel = _relationFactory.createRelation(_source, _dest);
 					
-					_graph.addRelation(_rel);
+					_graph.addRelation(_rel, _source, _dest);
 				} else {
 					String _element = _line.trim();
 

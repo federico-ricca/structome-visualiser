@@ -24,10 +24,12 @@ import java.util.Set;
 import org.structome.core.Artefact;
 import org.structome.core.Graph;
 import org.structome.core.Relation;
+import org.structome.core.RelationArtefactPair;
 
-public class SimpleGraph<N extends Artefact, E extends Relation<N>> implements Graph<N, E> {
+public class SimpleGraph<N extends Artefact, E extends Relation> implements Graph<N, E> {
+
 	private Map<String, N> nodes = new HashMap<String, N>();
-	private Map<String, Set<E>> outboundRelations = new HashMap<String, Set<E>>();
+	private Map<String, Set<RelationArtefactPair<E, N>>> outboundRelations = new HashMap<String, Set<RelationArtefactPair<E, N>>>();
 
 	@Override
 	public Collection<N> artefacts() {
@@ -40,27 +42,12 @@ public class SimpleGraph<N extends Artefact, E extends Relation<N>> implements G
 	}
 
 	@Override
-	public void addRelation(E _relation) {
-		String _sourceId = _relation.getSource().getId();
-
-		Set<E> _relations = outboundRelations.get(_sourceId);
-
-		if (_relations == null) {
-			_relations = new HashSet<E>();
-
-			outboundRelations.put(_sourceId, _relations);
-		}
-
-		_relations.add(_relation);
-	}
-
-	@Override
 	public boolean hasRelations(String _id) {
 		return outboundRelations.get(_id) != null;
 	}
 
 	@Override
-	public Collection<E> getRelationsFor(String _id) {
+	public Collection<RelationArtefactPair<E, N>> getRelationsFor(String _id) {
 		return outboundRelations.get(_id);
 	}
 
@@ -69,4 +56,20 @@ public class SimpleGraph<N extends Artefact, E extends Relation<N>> implements G
 		return nodes.get(_id);
 	}
 
+	@Override
+	public void addRelation(E _relation, N _source, N _dest) {
+		String _sourceId = _source.getId();
+
+		Set<RelationArtefactPair<E, N>> _relations = outboundRelations.get(_sourceId);
+
+		if (_relations == null) {
+			_relations = new HashSet<RelationArtefactPair<E, N>>();
+
+			outboundRelations.put(_sourceId, _relations);
+		}
+
+		RelationArtefactPair<E, N> _edgeEntry = new RelationArtefactPair<E, N>(_relation, _dest);
+
+		_relations.add(_edgeEntry);
+	}
 }
