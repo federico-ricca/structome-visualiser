@@ -18,14 +18,14 @@ package org.structome.io;
 import java.io.File;
 import java.io.IOException;
 
+import org.minitools.io.TextFileReader;
+import org.minitools.io.TextFileReader.LineVisitor;
 import org.structome.core.Artefact;
 import org.structome.core.ArtefactFactory;
 import org.structome.core.Graph;
 import org.structome.core.GraphLoader;
 import org.structome.core.Relation;
 import org.structome.core.RelationFactory;
-import org.structome.util.TextFileReader;
-import org.structome.util.TextFileReader.LineVisitor;
 
 public class CSVFileGraphLoader<N extends Artefact, E extends Relation> implements GraphLoader<N, E, String> {
 	private File csvFile;

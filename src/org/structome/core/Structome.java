@@ -13,32 +13,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-package org.structome.util;
+package org.structome.core;
 
-public class ClassNameUtils {
+import java.util.HashMap;
+import java.util.Map;
 
-	public final static String[] split(final String _fqcn) {
-		final String[] _name = new String[2];
+public class Structome {
+	private Map<String, Graph<? extends Artefact, ? extends Relation>> graphs = new HashMap<String, Graph<? extends Artefact, ? extends Relation>>();
 
-		int _iIndex = _fqcn.lastIndexOf(".");
-
-		if (_iIndex == -1) {
-			_name[0] = "";
-			_name[1] = _fqcn;
-		} else {
-			_name[0] = _fqcn.substring(0, _iIndex);
-			_name[1] = _fqcn.substring(_iIndex + 1, _fqcn.length());
-		}
-
-		return _name;
+	public void addGraph(String _id, Graph<? extends Artefact, ? extends Relation> _graph) {
+		graphs.put(_id, _graph);
 	}
 
-	public static boolean containsPackage(String _className) {
-		return _className.lastIndexOf('.') != -1;
-	}
-
-	public static boolean isClassName(String _varName) {
-		return _varName.matches("[A-Z].*");
+	public Graph<? extends Artefact, ? extends Relation> getGraph(String _id) {
+		return graphs.get(_id);
 	}
 
 }

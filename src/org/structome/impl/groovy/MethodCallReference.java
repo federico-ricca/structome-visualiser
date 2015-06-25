@@ -13,32 +13,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-package org.structome.util;
+package org.structome.impl.groovy;
 
-public class ClassNameUtils {
+public class MethodCallReference {
+	private String targetClassId;
+	private String targetMethod;
 
-	public final static String[] split(final String _fqcn) {
-		final String[] _name = new String[2];
-
-		int _iIndex = _fqcn.lastIndexOf(".");
-
-		if (_iIndex == -1) {
-			_name[0] = "";
-			_name[1] = _fqcn;
-		} else {
-			_name[0] = _fqcn.substring(0, _iIndex);
-			_name[1] = _fqcn.substring(_iIndex + 1, _fqcn.length());
-		}
-
-		return _name;
+	public MethodCallReference(String _targetClassId, String _targetMethod) {
+		targetClassId = _targetClassId;
+		targetMethod = _targetMethod;
 	}
 
-	public static boolean containsPackage(String _className) {
-		return _className.lastIndexOf('.') != -1;
+	public String getTargetClassId() {
+		return targetClassId;
 	}
 
-	public static boolean isClassName(String _varName) {
-		return _varName.matches("[A-Z].*");
+	public String getTargetMethod() {
+		return targetMethod;
 	}
-
 }

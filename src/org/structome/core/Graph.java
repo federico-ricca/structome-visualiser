@@ -21,9 +21,11 @@ public interface Graph<N extends Artefact, E extends Relation> {
 
 	public Collection<N> artefacts();
 
-	public void addRelation(final E _relation, final N _source, final N _dest);
+	public void addRelation(E _relation, N _source, N _dest);
 
-	public void addArtefact(final N _artefact);
+	public void addDirectedRelation(E _relation, N _source, N _dest);
+
+	public void addArtefact(N _artefact);
 
 	public Collection<RelationArtefactPair<E, N>> getRelationsFor(String _id);
 

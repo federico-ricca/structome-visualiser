@@ -68,7 +68,7 @@ public class CSVFileGraphWriterTests {
 		folder.create();
 		File _file = folder.newFile();
 
-		_graphWriter.write(_graph, _file, _simpleRepresentationFactory);
+		_graphWriter.write(_graph, _file, _simpleRepresentationFactory, null);
 
 		BufferedReader _reader = new BufferedReader(new FileReader(_file));
 

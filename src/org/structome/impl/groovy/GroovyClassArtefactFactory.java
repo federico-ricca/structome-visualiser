@@ -30,6 +30,12 @@ import org.codehaus.groovy.control.SourceUnit;
 import org.structome.core.ArtefactFactory;
 
 public class GroovyClassArtefactFactory implements ArtefactFactory<GroovyClassArtefact, GroovyFileArtefact> {
+	private GroovyCodeVisitor groovyCodeVisitor;
+
+	public GroovyClassArtefactFactory(GroovyCodeVisitor _codeVisitor) {
+		groovyCodeVisitor = _codeVisitor;
+	}
+
 	@Override
 	public GroovyClassArtefact createArtefact(GroovyFileArtefact _groovyFile) {
 		CompilerConfiguration _configuration = new CompilerConfiguration();
@@ -42,13 +48,11 @@ public class GroovyClassArtefactFactory implements ArtefactFactory<GroovyClassAr
 				_transformLoader);
 		_compilationUnit.addSource(_groovyFile.getSourceFile());
 
-		final GroovyCodeVisitor groovyCodeVisitor = new GroovyCodeVisitor();
-
 		_compilationUnit.addPhaseOperation(new CompilationUnit.PrimaryClassNodeOperation() {
 			@Override
 			public void call(final SourceUnit source, GeneratorContext context, ClassNode classNode)
 					throws CompilationFailedException {
-				groovyCodeVisitor.setSourceUnit(source);
+				groovyCodeVisitor.begin(source);
 				groovyCodeVisitor.visitClass(classNode);
 			}
 		}, Phases.CONVERSION);

@@ -37,6 +37,7 @@ import org.structome.impl.groovy.GroovyClassArtefact;
 import org.structome.impl.groovy.GroovyClassArtefactFactory;
 import org.structome.impl.groovy.GroovyClassDependencyGraph;
 import org.structome.impl.groovy.GroovyFileArtefact;
+import org.structome.impl.groovy.PluginBasedGroovyCodeVisitor;
 
 public class GroovyClassArtefactsProcessing {
 	static String[] sourceCodeA = { 
@@ -105,7 +106,7 @@ public class GroovyClassArtefactsProcessing {
 
 	@Test
 	public void groovyFileArtefactToGroovyClassArtefact() {
-		GroovyClassArtefactFactory _factory = new GroovyClassArtefactFactory();
+		GroovyClassArtefactFactory _factory = new GroovyClassArtefactFactory(new PluginBasedGroovyCodeVisitor());
 
 		GroovyClassArtefact _classArtefact = _factory.createArtefact(fileArtefact);
 
@@ -140,7 +141,7 @@ public class GroovyClassArtefactsProcessing {
 					String _superClassId = _artefact.getSuperClassId();
 					
 					if (_superClassId != null) {
-						_graph.addRelation(new ClassReferenceRelation(), _artefact, _graph.getArtefact(_superClassId));
+						_graph.addDirectedRelation(new ClassReferenceRelation(), _artefact, _graph.getArtefact(_superClassId));
 					}
 				}
 				
@@ -148,7 +149,7 @@ public class GroovyClassArtefactsProcessing {
 			}
 		};
 
-		GroovyClassArtefactFactory _factory = new GroovyClassArtefactFactory();
+		GroovyClassArtefactFactory _factory = new GroovyClassArtefactFactory(new PluginBasedGroovyCodeVisitor());
 
 		Graph<GroovyClassArtefact, ClassReferenceRelation> _graph = _builder.buildFrom(sourceArtefacts,
 				_factory);
@@ -159,7 +160,7 @@ public class GroovyClassArtefactsProcessing {
 		Collection<RelationArtefactPair<ClassReferenceRelation, GroovyClassArtefact>> _relations = _graph.getRelationsFor("some.package.BaseClass");
 		
 		assertNotNull(_relations);
-		assertEquals(2, _relations.size());
+		assertEquals(0, _relations.size());
 		// assertEquals(2, _graph.getRelationsFor("some.package.BaseClass"));
 	}
 }

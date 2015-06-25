@@ -23,6 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.minitools.io.FileCollector;
 
 public class FileCollectorTests {
 	public static final int MAX_FILES_JAVA = 10;

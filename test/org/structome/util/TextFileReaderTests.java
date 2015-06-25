@@ -23,7 +23,8 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.structome.util.TextFileReader.LineVisitor;
+import org.minitools.io.TextFileReader;
+import org.minitools.io.TextFileReader.LineVisitor;
 
 public class TextFileReaderTests {
 	public static final String[] testLines = { "line 1", "line 2", "line 3" };

@@ -72,4 +72,9 @@ public class SimpleGraph<N extends Artefact, E extends Relation> implements Grap
 
 		_relations.add(_edgeEntry);
 	}
+
+	@Override
+	public void addDirectedRelation(E _relation, N _source, N _dest) {
+		this.addRelation(_relation, _source, _dest);
+	}
 }

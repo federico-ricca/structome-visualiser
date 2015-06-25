@@ -13,32 +13,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-package org.structome.util;
+package org.structome.core;
 
-public class ClassNameUtils {
+public interface RelationStringRepresentationFactory<E extends Relation> {
 
-	public final static String[] split(final String _fqcn) {
-		final String[] _name = new String[2];
-
-		int _iIndex = _fqcn.lastIndexOf(".");
-
-		if (_iIndex == -1) {
-			_name[0] = "";
-			_name[1] = _fqcn;
-		} else {
-			_name[0] = _fqcn.substring(0, _iIndex);
-			_name[1] = _fqcn.substring(_iIndex + 1, _fqcn.length());
-		}
-
-		return _name;
-	}
-
-	public static boolean containsPackage(String _className) {
-		return _className.lastIndexOf('.') != -1;
-	}
-
-	public static boolean isClassName(String _varName) {
-		return _varName.matches("[A-Z].*");
-	}
-
+	public String createStringRepresentationFor(E _relation);
 }
